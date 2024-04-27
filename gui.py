@@ -1,6 +1,7 @@
 import tkinter as tk
 import re
 
+# Calculator class that set up the environment and strucutre of the gui
 class Calculator:
     def __init__(self, root):
         self.root = root
@@ -10,9 +11,10 @@ class Calculator:
 
         self.create_widgets()
 
+# Calculate function that checks if the expression is an evaluator like "+" "-" etc.
     def calculate(self, expression):
-        """Evaluate the arithmetic expression."""
         try:
+            # Here is where the checker happens
             result = eval(expression)
             if result == float('inf') or result == float('-inf'):
                 return "Infinity"
@@ -22,16 +24,17 @@ class Calculator:
         except Exception as e:
             return str(e)
 
+# Clears the fields
     def clear_entry(self):
-        """Clear the entry field."""
         self.entry.delete(0, tk.END)
 
+# Handles button click events
     def on_button_click(self, value):
-        """Handle button click events."""
         current_expression = self.entry.get()
         if value == 'C':
             self.clear_entry()
         elif value == '=':
+            # regex match checker for the arithmetic expressions
             if re.match(r'^[\d\s\(\)\+\-\*\/\%\^\.]+$', current_expression):
                 result = self.calculate(current_expression)
                 self.entry.delete(0, tk.END)
@@ -42,9 +45,9 @@ class Calculator:
         else:
             self.entry.insert(tk.END, value)
 
+# Creates layout for calculator gui
     def create_widgets(self):
-        """Create and layout widgets in the calculator."""
-        self.entry = tk.Entry(self.root, width=20, font=("Arial", 20), bd=5, relief=tk.GROOVE, justify=tk.RIGHT)
+        self.entry = tk.Entry(self.root, width=20, font=("Roboto", 20), bd=5, relief=tk.GROOVE, justify=tk.RIGHT)
         self.entry.grid(row=0, column=0, columnspan=4, padx=10, pady=10, sticky="nsew")
 
         buttons = [
@@ -57,7 +60,7 @@ class Calculator:
         row, col = 1, 0
         for button in buttons:
             action = lambda value=button: self.on_button_click(value)
-            tk.Button(self.root, text=button, width=5, height=2, font=("Arial", 16),
+            tk.Button(self.root, text=button, width=5, height=2, font=("Roboto", 16),
                       command=action).grid(row=row, column=col, padx=5, pady=5, sticky="nsew")
             col += 1
             if col > 3:
@@ -72,5 +75,6 @@ class Calculator:
 
 if __name__ == "__main__":
     root = tk.Tk()
+    #root.configure(bg="black")
     app = Calculator(root)
     root.mainloop()
